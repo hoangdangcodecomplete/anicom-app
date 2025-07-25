@@ -118,6 +118,7 @@ export const iconRegistry = {
   clap: require("@assets/icons/demo/clap.png"),
   community: require("@assets/icons/demo/community.png"),
   components: require("@assets/icons/demo/components.png"),
+  pills: require("@assets/icons/pills-solid-full.svg"),
   debug: require("@assets/icons/demo/debug.png"),
   github: require("@assets/icons/demo/github.png"),
   heart: require("@assets/icons/demo/heart.png"),

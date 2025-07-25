@@ -1,311 +1,135 @@
-import { FC, ReactElement, useCallback, useEffect, useRef, useState } from "react"
-import { Image, ImageStyle, Platform, SectionList, TextStyle, View, ViewStyle } from "react-native"
-import { Link, RouteProp, useRoute } from "@react-navigation/native"
-import { type ContentStyle } from "@shopify/flash-list"
-import { Drawer } from "react-native-drawer-layout"
+import { FC, useEffect, useState } from "react"
+import { ViewStyle, Image, Dimensions, ImageStyle, StyleSheet, Text, View } from "react-native"
+import LinearGradient from "react-native-linear-gradient"
 
-import { ListItem } from "@/components/ListItem"
-import { ListView, type ListViewRef } from "@/components/ListView"
 import { Screen } from "@/components/Screen"
-import { Text } from "@/components/Text"
-import { TxKeyPath, isRTL } from "@/i18n"
-import { translate } from "@/i18n/translate"
-import { DemoTabParamList, DemoTabScreenProps } from "@/navigators/DemoNavigator"
+import { DemoTabScreenProps } from "@/navigators/DemoNavigator"
 import { useAppTheme } from "@/theme/context"
-import { $styles } from "@/theme/styles"
-import type { Theme, ThemedStyle } from "@/theme/types"
-import { hasValidStringProp } from "@/utils/hasValidStringProp"
-import { useSafeAreaInsetsStyle } from "@/utils/useSafeAreaInsetsStyle"
+import type { ThemedStyle } from "@/theme/types"
+import { colors } from "@/theme/colors"
+import { Icon } from "@/components/Icon"
 
-import * as Demos from "./demos"
-import { DrawerIconButton } from "./DrawerIconButton"
-import SectionListWithKeyboardAwareScrollView from "./SectionListWithKeyboardAwareScrollView"
+const imageDog = require("@assets/images/image-dog.jpg")
+const bell = require("@assets/icons/bell.png")
 
-const logo = require("@assets/images/logo.png")
+const screenHeight = Dimensions.get("window").height
 
-export interface Demo {
-  name: string
-  description: TxKeyPath
-  data: ({ themed, theme }: { themed: any; theme: Theme }) => ReactElement[]
-}
-
-interface DemoListItem {
-  item: { name: string; useCases: string[] }
-  sectionIndex: number
-  handleScroll?: (sectionIndex: number, itemIndex?: number) => void
-}
-
-const slugify = (str: string) =>
-  str
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/[\s_-]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-
-const WebListItem: FC<DemoListItem> = ({ item, sectionIndex }) => {
-  const sectionSlug = item.name.toLowerCase()
+export const DemoShowroomScreen: FC<DemoTabScreenProps<"DemoShowroom">> = () => {
   const { themed } = useAppTheme()
-  return (
-    <View>
-      <Link
-        screen="DemoShowroom"
-        params={{ queryIndex: sectionSlug }}
-        style={themed($menuContainer)}
-      >
-        <Text preset="bold">{item.name}</Text>
-      </Link>
-      {item.useCases.map((u) => {
-        const itemSlug = slugify(u)
 
-        return (
-          <Link
-            key={`section${sectionIndex}-${u}`}
-            screen="DemoShowroom"
-            params={{ queryIndex: sectionSlug, itemIndex: itemSlug }}
-          >
-            <Text>{u}</Text>
-          </Link>
-        )
-      })}
-    </View>
-  )
-}
+  const [currentDate, setCurrentDate] = useState("")
+  const [currentTime, setCurrentTime] = useState("")
 
-const NativeListItem: FC<DemoListItem> = ({ item, sectionIndex, handleScroll }) => {
-  const { themed } = useAppTheme()
-  return (
-    <View>
-      <Text
-        onPress={() => handleScroll?.(sectionIndex)}
-        preset="bold"
-        style={themed($menuContainer)}
-      >
-        {item.name}
-      </Text>
-      {item.useCases.map((u, index) => (
-        <ListItem
-          key={`section${sectionIndex}-${u}`}
-          onPress={() => handleScroll?.(sectionIndex, index)}
-          text={u}
-          rightIcon={isRTL ? "caretLeft" : "caretRight"}
-        />
-      ))}
-    </View>
-  )
-}
+  useEffect(() => {
+    const updateDateTime = () => {
+      const now = new Date()
 
-const ShowroomListItem = Platform.select({ web: WebListItem, default: NativeListItem })
-const isAndroid = Platform.OS === "android"
+      // Format YYYY/MM/DD
+      const year = now.getFullYear()
+      const month = String(now.getMonth() + 1).padStart(2, "0")
+      const day = String(now.getDate()).padStart(2, "0")
 
-export const DemoShowroomScreen: FC<DemoTabScreenProps<"DemoShowroom">> =
-  function DemoShowroomScreen(_props) {
-    const [open, setOpen] = useState(false)
-    const timeout = useRef<ReturnType<typeof setTimeout>>(null)
-    const listRef = useRef<SectionList>(null)
-    const menuRef = useRef<ListViewRef<DemoListItem["item"]>>(null)
-    const route = useRoute<RouteProp<DemoTabParamList, "DemoShowroom">>()
-    const params = route.params
+      // Lấy thứ trong tuần (theo kiểu Nhật Bản: 月, 火, 水...)
+      const weekdays = ["日", "月", "火", "水", "木", "金", "土"]
+      const weekday = weekdays[now.getDay()]
 
-    const { themed, theme } = useAppTheme()
+      // Format giờ phút
+      const hours = String(now.getHours()).padStart(2, "0")
+      const minutes = String(now.getMinutes()).padStart(2, "0")
 
-    const toggleDrawer = useCallback(() => {
-      if (!open) {
-        setOpen(true)
-      } else {
-        setOpen(false)
-      }
-    }, [open])
-
-    const handleScroll = useCallback((sectionIndex: number, itemIndex = 0) => {
-      try {
-        listRef.current?.scrollToLocation({
-          animated: true,
-          itemIndex,
-          sectionIndex,
-          viewPosition: 0.25,
-        })
-      } catch (e) {
-        console.error(e)
-      }
-    }, [])
-
-    // handle Web links
-    useEffect(() => {
-      if (params !== undefined && Object.keys(params).length > 0) {
-        const demoValues = Object.values(Demos)
-        const findSectionIndex = demoValues.findIndex(
-          (x) => x.name.toLowerCase() === params.queryIndex,
-        )
-        let findItemIndex = 0
-        if (params.itemIndex) {
-          try {
-            findItemIndex = demoValues[findSectionIndex].data({ themed, theme }).findIndex((u) => {
-              if (hasValidStringProp(u.props, "name")) {
-                return (
-                  slugify(translate((u.props as { name: TxKeyPath }).name)) === params.itemIndex
-                )
-              }
-              return false
-            })
-          } catch (err) {
-            console.error(err)
-          }
-        }
-        handleScroll(findSectionIndex, findItemIndex)
-      }
-    }, [handleScroll, params, theme, themed])
-
-    const scrollToIndexFailed = (info: {
-      index: number
-      highestMeasuredFrameIndex: number
-      averageItemLength: number
-    }) => {
-      listRef.current?.getScrollResponder()?.scrollToEnd()
-      timeout.current = setTimeout(
-        () =>
-          listRef.current?.scrollToLocation({
-            animated: true,
-            itemIndex: info.index,
-            sectionIndex: 0,
-          }),
-        50,
-      )
+      setCurrentDate(`${year}/${month}/${day} (${weekday})`)
+      setCurrentTime(`${hours}:${minutes}`)
     }
 
-    useEffect(() => {
-      return () => {
-        if (timeout.current) {
-          clearTimeout(timeout.current)
-        }
-      }
-    }, [])
+    updateDateTime()
+    const interval = setInterval(updateDateTime, 60000) // cập nhật mỗi phút
 
-    const $drawerInsets = useSafeAreaInsetsStyle(["top"])
+    return () => clearInterval(interval)
+  }, [])
 
-    return (
-      <Drawer
-        open={open}
-        onOpen={() => setOpen(true)}
-        onClose={() => setOpen(false)}
-        drawerType="back"
-        drawerPosition={isRTL ? "right" : "left"}
-        renderDrawerContent={() => (
-          <View style={themed([$drawer, $drawerInsets])}>
-            <View style={themed($logoContainer)}>
-              <Image source={logo} style={$logoImage} />
-            </View>
-            <ListView<DemoListItem["item"]>
-              ref={menuRef}
-              contentContainerStyle={themed($listContentContainer)}
-              estimatedItemSize={250}
-              data={Object.values(Demos).map((d) => ({
-                name: d.name,
-                useCases: d.data({ theme, themed }).map((u) => {
-                  if (hasValidStringProp(u.props, "name")) {
-                    return translate((u.props as { name: TxKeyPath }).name)
-                  }
-                  return ""
-                }),
-              }))}
-              keyExtractor={(item) => item.name}
-              renderItem={({ item, index: sectionIndex }) => (
-                <ShowroomListItem {...{ item, sectionIndex, handleScroll }} />
-              )}
-            />
-          </View>
-        )}
-      >
-        <Screen
-          preset="fixed"
-          safeAreaEdges={["top"]}
-          contentContainerStyle={$styles.flex1}
-          {...(isAndroid ? { KeyboardAvoidingViewProps: { behavior: undefined } } : {})}
-        >
-          <DrawerIconButton onPress={toggleDrawer} />
+  return (
+    <Screen preset="scroll" safeAreaEdges={[]} contentContainerStyle={[themed($container)]}>
+      <Image source={imageDog} style={$image} resizeMode="cover" />
 
-          <SectionListWithKeyboardAwareScrollView
-            ref={listRef}
-            contentContainerStyle={themed($sectionListContentContainer)}
-            stickySectionHeadersEnabled={false}
-            sections={Object.values(Demos).map((d) => ({
-              name: d.name,
-              description: d.description,
-              data: [d.data({ theme, themed })],
-            }))}
-            renderItem={({ item, index: sectionIndex }) => (
-              <View>
-                {item.map((demo: ReactElement, demoIndex: number) => (
-                  <View key={`${sectionIndex}-${demoIndex}`}>{demo}</View>
-                ))}
-              </View>
-            )}
-            renderSectionFooter={() => <View style={themed($demoUseCasesSpacer)} />}
-            ListHeaderComponent={
-              <View style={themed($heading)}>
-                <Text preset="heading" tx="demoShowroomScreen:jumpStart" />
-              </View>
-            }
-            onScrollToIndexFailed={scrollToIndexFailed}
-            renderSectionHeader={({ section }) => {
-              return (
-                <View>
-                  <Text preset="heading" style={themed($demoItemName)}>
-                    {section.name}
-                  </Text>
-                  <Text style={themed($demoItemDescription)}>{translate(section.description)}</Text>
-                </View>
-              )
-            }}
-          />
-        </Screen>
-      </Drawer>
-    )
-  }
+      <LinearGradient
+        colors={["white", "transparent"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 0, y: 1 }}
+        style={styles.topGradient}
+      />
 
-const $drawer: ThemedStyle<ViewStyle> = ({ colors }) => ({
-  backgroundColor: colors.background,
-  flex: 1,
-})
+      <LinearGradient
+        colors={["transparent", "white"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 0, y: 1 }}
+        style={styles.bottomGradient}
+      />
 
-const $listContentContainer: ThemedStyle<ContentStyle> = ({ spacing }) => ({
-  paddingHorizontal: spacing.lg,
-})
-
-const $sectionListContentContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-  paddingHorizontal: spacing.lg,
-})
-
-const $heading: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-  marginBottom: spacing.xxxl,
-})
-
-const $logoImage: ImageStyle = {
-  height: 42,
-  width: 77,
+      <View style={styles.dateTimeContainer}>
+        <View style={styles.iconStatus}>
+          <Icon icon="pills" color={colors.accent300} size={18} />
+          <Icon icon="bell" color={colors.accent300} size={18} />
+        </View>
+        <View style={styles.iconStatus}>
+          <Text style={styles.dateText}>{currentDate}</Text>
+          <Icon icon="bell" color={colors.accent300} size={18} />
+        </View>
+        <Text style={styles.timeText}>{currentTime}</Text>
+      </View>
+    </Screen>
+  )
 }
 
-const $logoContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-  alignSelf: "flex-start",
-  justifyContent: "center",
-  height: 56,
-  paddingHorizontal: spacing.lg,
+const $container: ThemedStyle<ViewStyle> = () => ({
+  paddingBottom: 0,
 })
 
-const $menuContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-  paddingBottom: spacing.xs,
-  paddingTop: spacing.lg,
-})
+const $image: ImageStyle = {
+  width: "100%",
+  height: screenHeight / 2,
+}
 
-const $demoItemName: ThemedStyle<TextStyle> = ({ spacing }) => ({
-  fontSize: 24,
-  marginBottom: spacing.md,
-})
+const $imageBell: ImageStyle = {
+  width: "100%",
+  height: screenHeight / 2,
+}
 
-const $demoItemDescription: ThemedStyle<TextStyle> = ({ spacing }) => ({
-  marginBottom: spacing.xxl,
-})
-
-const $demoUseCasesSpacer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-  paddingBottom: spacing.xxl,
+const styles = StyleSheet.create({
+  topGradient: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 40,
+  },
+  bottomGradient: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 80,
+  },
+  dateTimeContainer: {
+    position: "absolute",
+    bottom: 6,
+    left: 30,
+  },
+  dateText: {
+    fontSize: 16,
+    color: colors.textWhite,
+    marginBottom: 2,
+  },
+  timeText: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: colors.textWhite,
+  },
+  iconStatus: {
+    flexDirection: "row",
+    gap: 6,
+    alignItems: "flex-end",
+  },
+  iconBell: {
+    color: colors.accent300,
+  },
 })

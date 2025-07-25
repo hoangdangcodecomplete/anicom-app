@@ -54,7 +54,17 @@ export function DemoNavigator() {
         screenOptions={{
           headerShown: false,
           tabBarHideOnKeyboard: true,
-          tabBarStyle: themed([$tabBar, { height: bottom + 70 }]),
+          tabBarStyle: themed([
+            $tabBar,
+            {
+              backgroundColor: "#FFFFFF",
+              height: bottom + 70,
+              marginHorizontal: 16,
+              marginBottom: 20,
+              borderRadius: 20,
+              position: "absolute",
+            },
+          ]),
           tabBarActiveTintColor: colors.text,
           tabBarInactiveTintColor: colors.text,
           tabBarLabelStyle: themed($tabBarLabel),
@@ -121,6 +131,10 @@ export function DemoNavigator() {
 const $tabBar: ThemedStyle<ViewStyle> = ({ colors }) => ({
   backgroundColor: colors.background,
   borderTopColor: colors.transparent,
+  shadowColor: "#000",
+  shadowOpacity: 0.05,
+  shadowRadius: 5,
+  elevation: 3,
 })
 
 const $tabBarItem: ThemedStyle<ViewStyle> = ({ spacing }) => ({
