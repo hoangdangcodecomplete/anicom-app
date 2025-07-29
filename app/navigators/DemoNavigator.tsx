@@ -6,20 +6,34 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Icon } from "@/components/Icon"
 import { EpisodeProvider } from "@/context/EpisodeContext"
 import { translate } from "@/i18n/translate"
-import { DemoCommunityScreen } from "@/screens/DemoCommunityScreen"
-import { DemoDebugScreen } from "@/screens/DemoDebugScreen"
-import { DemoPodcastListScreen } from "@/screens/DemoPodcastListScreen"
-import { DemoShowroomScreen } from "@/screens/DemoShowroomScreen/DemoShowroomScreen"
+import { DemoPhotoSnapScreen } from "@/screens/DemoPhotoSnapScreen"
+import { DemoMedicalRecordScreen } from "@/screens/DemoMedicalRecordScreen"
+import { DemoCalendarScreen } from "@/screens/DemoShowroomScreen/DemoCalendarScreen"
 import { useAppTheme } from "@/theme/context"
 import type { ThemedStyle } from "@/theme/types"
 
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
+import { DemoHomeScreen } from "@/screens/DemoHomeScreen"
+import { DemoNewsScreen } from "@/screens/DemoNewsScreen"
 
 export type DemoTabParamList = {
-  DemoCommunity: undefined
-  DemoShowroom: { queryIndex?: string; itemIndex?: string }
-  DemoDebug: undefined
-  DemoPodcastList: undefined
+  DemoPhotoSnap: undefined
+  DemoCalendar: { queryIndex?: string; itemIndex?: string }
+  DemoHome: undefined
+  DemoNews: undefined
+  DemoMedicalRecord: undefined
+}
+
+export type DemoTabHomeMainList = {
+  ExchangeRelated2: undefined
+  ExchangeRelated: undefined
+  ExchangeRelated3: undefined
+  TodayTask: undefined
+  MyRoom: undefined
+  SchedulePlan: undefined
+  OngoingEvents: undefined
+  QuestPlaza: undefined
+  AnicomInsurance: undefined
 }
 
 /**
@@ -29,6 +43,11 @@ export type DemoTabParamList = {
  */
 export type DemoTabScreenProps<T extends keyof DemoTabParamList> = CompositeScreenProps<
   BottomTabScreenProps<DemoTabParamList, T>,
+  AppStackScreenProps<keyof AppStackParamList>
+>
+
+export type DemoTabHomeMainProps<T extends keyof DemoTabHomeMainList> = CompositeScreenProps<
+  BottomTabScreenProps<DemoTabHomeMainList, T>,
   AppStackScreenProps<keyof AppStackParamList>
 >
 
@@ -51,6 +70,7 @@ export function DemoNavigator() {
   return (
     <EpisodeProvider>
       <Tab.Navigator
+        initialRouteName="DemoHome"
         screenOptions={{
           headerShown: false,
           tabBarHideOnKeyboard: true,
@@ -65,61 +85,68 @@ export function DemoNavigator() {
               position: "absolute",
             },
           ]),
-          tabBarActiveTintColor: colors.text,
+          tabBarActiveTintColor: colors.tint,
           tabBarInactiveTintColor: colors.text,
           tabBarLabelStyle: themed($tabBarLabel),
           tabBarItemStyle: themed($tabBarItem),
         }}
       >
         <Tab.Screen
-          name="DemoShowroom"
-          component={DemoShowroomScreen}
+          name="DemoPhotoSnap"
+          component={DemoPhotoSnapScreen}
           options={{
             tabBarLabel: translate("demoNavigator:componentsTab"),
             tabBarIcon: ({ focused }) => (
-              <Icon
-                icon="components"
-                color={focused ? colors.tint : colors.tintInactive}
-                size={30}
-              />
+              <Icon icon="photoSnap" color={focused ? colors.tint : colors.neutral500} size={30} />
             ),
           }}
         />
 
         <Tab.Screen
-          name="DemoCommunity"
-          component={DemoCommunityScreen}
+          name="DemoCalendar"
+          component={DemoCalendarScreen}
+          options={{
+            tabBarLabel: translate("demoNavigator:componentsTab"),
+            tabBarIcon: ({ focused }) => (
+              <Icon icon="calendar" color={focused ? colors.tint : colors.neutral500} size={30} />
+            ),
+          }}
+        />
+
+        <Tab.Screen
+          name="DemoHome"
+          component={DemoHomeScreen}
           options={{
             tabBarLabel: translate("demoNavigator:communityTab"),
             tabBarIcon: ({ focused }) => (
-              <Icon
-                icon="community"
-                color={focused ? colors.tint : colors.tintInactive}
-                size={30}
-              />
+              <Icon icon="home" color={focused ? colors.tint : colors.neutral500} size={30} />
             ),
           }}
         />
 
         <Tab.Screen
-          name="DemoPodcastList"
-          component={DemoPodcastListScreen}
+          name="DemoNews"
+          component={DemoNewsScreen}
+          options={{
+            tabBarLabel: translate("demoNavigator:debugTab"),
+            tabBarIcon: ({ focused }) => (
+              <Icon icon="news" color={focused ? colors.tint : colors.neutral500} size={30} />
+            ),
+          }}
+        />
+
+        <Tab.Screen
+          name="DemoMedicalRecord"
+          component={DemoMedicalRecordScreen}
           options={{
             tabBarAccessibilityLabel: translate("demoNavigator:podcastListTab"),
             tabBarLabel: translate("demoNavigator:podcastListTab"),
             tabBarIcon: ({ focused }) => (
-              <Icon icon="podcast" color={focused ? colors.tint : colors.tintInactive} size={30} />
-            ),
-          }}
-        />
-
-        <Tab.Screen
-          name="DemoDebug"
-          component={DemoDebugScreen}
-          options={{
-            tabBarLabel: translate("demoNavigator:debugTab"),
-            tabBarIcon: ({ focused }) => (
-              <Icon icon="debug" color={focused ? colors.tint : colors.tintInactive} size={30} />
+              <Icon
+                icon="medicalRecord"
+                color={focused ? colors.tint : colors.neutral500}
+                size={30}
+              />
             ),
           }}
         />
@@ -145,5 +172,5 @@ const $tabBarLabel: ThemedStyle<TextStyle> = ({ colors, typography }) => ({
   fontSize: 12,
   fontFamily: typography.primary.medium,
   lineHeight: 16,
-  color: colors.text,
+  fontWeight: "600",
 })

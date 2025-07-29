@@ -31,9 +31,7 @@ function openLinkInBrowser(url: string) {
 
 const usingHermes = typeof HermesInternal === "object" && HermesInternal !== null
 
-export const DemoDebugScreen: FC<DemoTabScreenProps<"DemoDebug">> = function DemoDebugScreen(
-  _props,
-) {
+export const DemoNewsScreen: FC<DemoTabScreenProps<"DemoNews">> = function DemoNewsScreen(_props) {
   const { setThemeContextOverride, themeContext, themed } = useAppTheme()
   const { logout } = useAuth()
 

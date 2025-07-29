@@ -31,6 +31,11 @@ const palette = {
   angry100: "#F2D6CD",
   angry500: "#C03403",
 
+
+  appColor100: "#58cd80",
+  appColor200: "#41b36c",
+
+
   overlay20: "rgba(25, 16, 21, 0.2)",
   overlay50: "rgba(25, 16, 21, 0.5)",
 } as const
@@ -47,4 +52,7 @@ export const colors = {
   separator: palette.neutral300,
   error: palette.angry500,
   errorBackground: palette.angry100,
+  appColor100: palette.appColor100,
+  appColor200:palette.appColor200,
+  neutral500: palette.neutral500,
 } as const

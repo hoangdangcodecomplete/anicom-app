@@ -3,13 +3,13 @@ import { TextStyle } from "react-native"
 
 import { Screen } from "@/components/Screen"
 import { Text } from "@/components/Text"
-import { DemoTabScreenProps } from "@/navigators/DemoNavigator"
+import { DemoTabHomeMainProps } from "@/navigators/DemoNavigator"
 import { useAppTheme } from "@/theme/context"
 import { $styles } from "@/theme/styles"
 import type { ThemedStyle } from "@/theme/types"
 
-export const DemoCommunityScreen: FC<DemoTabScreenProps<"DemoCommunity">> =
-  function DemoCommunityScreen(_props) {
+export const ExchangeRelated2: FC<DemoTabHomeMainProps<"ExchangeRelated2">> =
+  function ExchangeRelated2(_props) {
     const { themed } = useAppTheme()
     return (
       <Screen preset="scroll" contentContainerStyle={$styles.container} safeAreaEdges={["top"]}>
