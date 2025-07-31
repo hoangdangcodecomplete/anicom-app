@@ -106,7 +106,7 @@ export function DemoNavigator() {
           name="DemoCalendar"
           component={DemoCalendarScreen}
           options={{
-            tabBarLabel: translate("demoNavigator:componentsTab"),
+            tabBarLabel: translate("demoNavigator:calendar"),
             tabBarIcon: ({ focused }) => (
               <Icon icon="calendar" color={focused ? colors.tint : colors.neutral500} size={30} />
             ),

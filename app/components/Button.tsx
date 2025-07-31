@@ -220,7 +220,7 @@ const $viewPresets: Record<Presets, ThemedStyleArray<ViewStyle>> = {
   filled: [
     $styles.row,
     $baseViewStyle,
-    ({ colors }) => ({ backgroundColor: colors.palette.neutral300 }),
+    ({ colors }) => ({ backgroundColor: colors.palette.neutral100 }),
   ],
   reversed: [
     $styles.row,
@@ -238,7 +238,7 @@ const $textPresets: Record<Presets, ThemedStyleArray<TextStyle>> = {
 const $pressedViewPresets: Record<Presets, ThemedStyle<ViewStyle>> = {
   default: ({ colors }) => ({ backgroundColor: colors.palette.neutral200 }),
   filled: ({ colors }) => ({ backgroundColor: colors.palette.neutral400 }),
-  reversed: ({ colors }) => ({ backgroundColor: colors.palette.neutral700 }),
+  reversed: ({ colors }) => ({ backgroundColor: colors.palette.neutral100 }),
 }
 
 const $pressedTextPresets: Record<Presets, ThemedStyle<TextStyle>> = {

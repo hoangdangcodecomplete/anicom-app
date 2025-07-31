@@ -45,10 +45,11 @@ const en = {
   },
   demoNavigator: {
     componentsTab: "Photosnap",
-    debugTab: "Calendar",
+    debugTab: "News",
     home: "Home",
     communityTab: "News",
     podcastListTab: "Medical Record",
+    calendar:"Calendar"
   },
   demoCommunityScreen: {
     title: "Connect with the community",

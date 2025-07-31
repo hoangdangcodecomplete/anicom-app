@@ -51,6 +51,8 @@ const ja: Translations = {
     home:"Home",
     communityTab: "ニュース",
     podcastListTab: "カルテ",
+    calendar:"Calendar"
+
   },
   demoCommunityScreen: {
     title: "コミュニティと繋がろう",

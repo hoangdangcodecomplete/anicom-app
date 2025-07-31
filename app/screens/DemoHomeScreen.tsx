@@ -300,7 +300,7 @@ export const DemoHomeScreen: FC<DemoTabScreenProps<"DemoHome">> = function DemoH
                   tabBarIcon: ({ focused }) => (
                     <Icon
                       icon={tab.icon}
-                      color={focused ? colors.tint : colors.tintInactive}
+                      color={focused ? colors.tint : colors.neutral500}
                       size={30}
                     />
                   ),
@@ -317,11 +317,6 @@ export const DemoHomeScreen: FC<DemoTabScreenProps<"DemoHome">> = function DemoH
 const $container: ThemedStyle<ViewStyle> = () => ({
   paddingBottom: 0,
 })
-
-const $image: ImageStyle = {
-  width: "100%",
-  height: screenHeight / 2,
-}
 
 const $imageBell: ImageStyle = {
   width: "100%",
