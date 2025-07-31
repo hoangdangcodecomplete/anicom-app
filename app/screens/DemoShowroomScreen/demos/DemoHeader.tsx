@@ -7,7 +7,7 @@ import { $styles } from "@/theme/styles"
 import type { ThemedStyle } from "@/theme/types"
 
 import { DemoDivider } from "../DemoDivider"
-import { Demo } from "../DemoShowroomScreen"
+import { Demo } from "../DemoCalendarScreen"
 import { DemoUseCase } from "../DemoUseCase"
 
 const $rightAlignTitle: TextStyle = {

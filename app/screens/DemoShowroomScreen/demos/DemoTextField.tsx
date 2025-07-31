@@ -6,7 +6,7 @@ import { TextField } from "@/components/TextField"
 import type { ThemedStyle } from "@/theme/types"
 
 import { DemoDivider } from "../DemoDivider"
-import { Demo } from "../DemoShowroomScreen"
+import { Demo } from "../DemoCalendarScreen"
 import { DemoUseCase } from "../DemoUseCase"
 
 const $customInputStyle: ThemedStyle<TextStyle> = ({ colors }) => ({

@@ -51,6 +51,7 @@ const config = {
         DemoDebug: "debug",
         DemoPodcastList: "podcast",
         DemoCommunity: "community",
+        DemoHome: "home",
       },
     },
   },

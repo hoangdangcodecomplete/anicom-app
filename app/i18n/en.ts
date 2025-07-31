@@ -44,10 +44,11 @@ const en = {
     hint: "Hint: you can use any email address and your favorite password :)",
   },
   demoNavigator: {
-    componentsTab: "Components",
-    debugTab: "Debug",
-    communityTab: "Community",
-    podcastListTab: "Podcast",
+    componentsTab: "Photosnap",
+    debugTab: "Calendar",
+    home: "Home",
+    communityTab: "News",
+    podcastListTab: "Medical Record",
   },
   demoCommunityScreen: {
     title: "Connect with the community",

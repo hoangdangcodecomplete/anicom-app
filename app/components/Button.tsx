@@ -225,7 +225,7 @@ const $viewPresets: Record<Presets, ThemedStyleArray<ViewStyle>> = {
   reversed: [
     $styles.row,
     $baseViewStyle,
-    ({ colors }) => ({ backgroundColor: colors.palette.neutral800 }),
+    ({ colors }) => ({ backgroundColor: colors.palette.appColor200 }),
   ],
 }
 

@@ -73,7 +73,12 @@ export const colors = {
    * The main tinting color.
    */
   tint: palette.appColor200,
+
+  accent100: palette.accent100,
   accent300: palette.accent300,
+  accent500: palette.accent500,
+  neutral500: palette.neutral500,
+
   /**
    * The inactive tinting color.
    */
