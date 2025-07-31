@@ -48,8 +48,11 @@ const es: Translations = {
   demoNavigator: {
     componentsTab: "Componentes",
     debugTab: "Debug",
+    home:"Home",
     communityTab: "Comunidad",
     podcastListTab: "Podcasts",
+    calendar:"Calendar"
+
   },
   demoCommunityScreen: {
     title: "Conecta con la comunidad",
