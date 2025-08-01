@@ -15,6 +15,7 @@ import type { ThemedStyle } from "@/theme/types"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
 import { DemoHomeScreen } from "@/screens/DemoHomeScreen"
 import { DemoNewsScreen } from "@/screens/DemoNewsScreen"
+import { scale } from "react-native-size-matters"
 
 export type DemoTabParamList = {
   DemoPhotoSnap: undefined
@@ -97,7 +98,11 @@ export function DemoNavigator() {
           options={{
             tabBarLabel: translate("demoNavigator:componentsTab"),
             tabBarIcon: ({ focused }) => (
-              <Icon icon="photoSnap" color={focused ? colors.tint : colors.neutral500} size={30} />
+              <Icon
+                icon="photoSnap"
+                color={focused ? colors.tint : colors.neutral500}
+                size={scale(30)}
+              />
             ),
           }}
         />
@@ -108,7 +113,11 @@ export function DemoNavigator() {
           options={{
             tabBarLabel: translate("demoNavigator:calendar"),
             tabBarIcon: ({ focused }) => (
-              <Icon icon="calendar" color={focused ? colors.tint : colors.neutral500} size={30} />
+              <Icon
+                icon="calendar"
+                color={focused ? colors.tint : colors.neutral500}
+                size={scale(30)}
+              />
             ),
           }}
         />
@@ -119,7 +128,11 @@ export function DemoNavigator() {
           options={{
             tabBarLabel: translate("demoNavigator:communityTab"),
             tabBarIcon: ({ focused }) => (
-              <Icon icon="home" color={focused ? colors.tint : colors.neutral500} size={30} />
+              <Icon
+                icon="home"
+                color={focused ? colors.tint : colors.neutral500}
+                size={scale(30)}
+              />
             ),
           }}
         />
@@ -130,7 +143,11 @@ export function DemoNavigator() {
           options={{
             tabBarLabel: translate("demoNavigator:debugTab"),
             tabBarIcon: ({ focused }) => (
-              <Icon icon="news" color={focused ? colors.tint : colors.neutral500} size={30} />
+              <Icon
+                icon="news"
+                color={focused ? colors.tint : colors.neutral500}
+                size={scale(30)}
+              />
             ),
           }}
         />
@@ -145,7 +162,7 @@ export function DemoNavigator() {
               <Icon
                 icon="medicalRecord"
                 color={focused ? colors.tint : colors.neutral500}
-                size={30}
+                size={scale(30)}
               />
             ),
           }}
