@@ -29,6 +29,7 @@ import { ExchangeRelated3 } from "./Related/ExchangeRelated3"
 import { MyRoom } from "./Room/MyRoom"
 import { SchedulePlan } from "./Room/SchedulePlan"
 import { TodayTask } from "./Room/ThingTodo"
+import { scale } from "react-native-size-matters"
 
 const imageDog = require("@assets/images/image-dog1.png")
 const imageFade = require("@assets/images/image-fade.png")
@@ -293,15 +294,13 @@ export const DemoHomeScreen: FC<DemoTabScreenProps<"DemoHome">> = function DemoH
                 component={tab.component as React.ComponentType<any>}
                 options={{
                   tabBarLabel: () => (
-                    <Text style={{ fontSize: 12, fontWeight: "500", color: "#FFFFFF" }}>
-                      {tab.label}
-                    </Text>
+                    <Text style={{ fontSize: scale(10), color: "#FFFFFF" }}>{tab.label}</Text>
                   ),
                   tabBarIcon: ({ focused }) => (
                     <Icon
                       icon={tab.icon}
                       color={focused ? colors.tint : colors.neutral500}
-                      size={30}
+                      size={scale(28)}
                     />
                   ),
                 }}
